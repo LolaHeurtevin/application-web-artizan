@@ -9,7 +9,6 @@ function ArtisansList ({ artisans }) {
   return (
     <>
       <div className='flex flex-col'>
-        <h2 className='text-4xl py-6'>Artisans List</h2>
         <div className='flex flex-row flex-wrap gap-4'>
           {
                     artisans.map(artisan => (
