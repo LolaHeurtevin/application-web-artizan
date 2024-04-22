@@ -8,9 +8,10 @@ function Artisans () {
   if (error) return <pre>{JSON.springify(error, null, 2)}</pre>
 
   return (
-    <>
+    <div className='mx-40 my-20 text-justify'>
+      <h1 className='font-semibold text-4xl flex mb-10'>Nos artisans</h1>
       <ArtisansList artisans={response} />
-    </>
+    </div>
   )
 }
 

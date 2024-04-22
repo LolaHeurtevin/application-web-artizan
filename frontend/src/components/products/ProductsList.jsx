@@ -7,6 +7,7 @@ function ProductsList ({ products }) {
   }
   return (
     <>
+      <h2 className='text-2xl text-bold mt-10 mb-5'>Tous les produits</h2>
       <div className='flex flex-row flex-wrap gap-4 justify-center'>
         {
           products.map(product => (
@@ -19,7 +20,7 @@ function ProductsList ({ products }) {
 }
 
 ProductsList.propTypes = {
-  products: PropTypes.arrayOf(PropTypes.objects)
+  products: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default ProductsList

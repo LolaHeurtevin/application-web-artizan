@@ -17,16 +17,16 @@ function Auth () {
   }, [])
 
   return (
-    <>
+    <div className='mx-40 my-20 text-justify'>
       {
                 isRegister
                   ? <RegisterForm />
                   : <LoginForm />
             }
-      <a onClick={() => setIsRegister(!isRegister)}>
+      <a className='my-5' onClick={() => setIsRegister(!isRegister)}>
         {isRegister ? "J'ai déjà un compte" : "Je n'ai pas de compte"}
       </a>
-    </>
+    </div>
   )
 }
 export default Auth

@@ -11,9 +11,9 @@ function ArtisanHeader ({ attributes }) {
           className='rounded'
         />
       </div>
-      <div className='flex-col flex-end'>
+      <div className='flex-col flex-end m-5'>
         <h1 className='text-2xl text-bold'>{attributes.name}</h1>
-        <p className='m-5 text-justify'>{attributes.description}</p>
+        <p className='mt-4 text-justify'>{attributes.description}</p>
       </div>
     </div>
   )

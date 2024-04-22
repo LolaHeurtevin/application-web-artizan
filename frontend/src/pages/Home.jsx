@@ -16,10 +16,10 @@ function Home () {
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
   return response && (
-    <>
+    <div className='mx-40 my-20 text-justify'>
       <h1 className='font-semibold text-4xl flex'>Home</h1>
       <ProductsList products={response} />
-    </>
+    </div>
   )
 }
 

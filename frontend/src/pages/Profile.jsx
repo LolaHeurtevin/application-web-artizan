@@ -17,10 +17,10 @@ function Profile () {
   console.log(error)
 
   return response && (
-    <>
-      <h1>Profil</h1>
+    <div className='mx-40 my-20 text-justify'>
+      <h1 className='font-semibold text-4xl flex'>Profil</h1>
       <UserProfile attributes={response} />
-    </>
+    </div>
   )
 }
 
