@@ -22,17 +22,8 @@ function CartList ({ itemsList }) {
   )
 }
 
-/*
-<div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCart(cart + 1)}>
-        Click me
-      </button>
-    </div>
-*/
-
 CartList.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.object)
+  itemsList: PropTypes.arrayOf(PropTypes.object)
 }
 
 export default CartList
