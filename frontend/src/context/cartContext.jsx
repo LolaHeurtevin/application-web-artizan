@@ -1,16 +1,18 @@
 import { createContext, useReducer, useEffect, useContext } from 'react'
+import { toast } from 'react-toastify'
 
 const CartContext = createContext()
-export default CartContext
 
 const actionTypes = {
   ADD: 'ADD', // ajouter un article au panier
   DELETE: 'DELETE', // supprimer un article du panier
-  SET: 'SET_CART'
+  SET: 'SET_CART',
+  ERROR: 'ERROR'
 }
 
 const initialState = {
-  cart: []
+  cart: [],
+  error: null
 }
 
 /**
@@ -22,17 +24,26 @@ const cartReducer = (prevState, action) => {
     case actionTypes.ADD:
       return {
         ...prevState,
-        cart: [...prevState.cart, action.product]
+        cart: [...prevState.cart, action.product],
+        error: null
       }
     case actionTypes.DELETE:
       return {
         ...prevState,
-        cart: prevState.cart.filter((item) => item.id !== action.productId)
+        // cart: prevState.cart.filter((item) => item.id !== action.productId)
+        cart: prevState.cart.filter((item) => item.id !== action.product.id),
+        error: null
       }
     case actionTypes.SET:
       return {
         ...prevState,
-        cart: action.cart
+        cart: action.cart,
+        error: null
+      }
+    case actionTypes.ERROR:
+      return {
+        cart: [],
+        error: action.data.error
       }
     default:
       throw new Error(`Unhandled action type : ${action.type}`)
@@ -41,22 +52,50 @@ const cartReducer = (prevState, action) => {
 
 const cartFactory = (dispatch) => ({
   addToCart: (product) => {
-    dispatch({ type: actionTypes.ADD, product })
+    try {
+      dispatch({ type: actionTypes.ADD, product })
+    } catch (error) {
+      console.log(error)
+      toast.error('Une erreur est survenue lors de l\'ajout au panier')
+      dispatch({
+        type: actionTypes.ERROR,
+        data: { error: 'Une erreur est survenue lors de l\'ajout au panier' }
+      })
+    }
   },
+  /*
   deleteFromCart: (productId) => {
     dispatch({ type: actionTypes.DELETE, productId })
+  } */
+  deleteFromCart: (product) => {
+    try {
+      dispatch({
+        type: actionTypes.DELETE,
+        product: {
+          id: product.id
+        }
+      })
+    } catch (error) {
+      console.log(error)
+      toast.error('Une erreur est survenue lors de la suppression du panier')
+      dispatch({
+        type: actionTypes.ERROR,
+        data: { error: 'Une erreur est survenue lors de la suppresion du panier' }
+      })
+    }
   }
+
 })
 
-function CartProvider ({ children }) {
+const CartProvider = ({ children }) => {
+  const savedState = window.localStorage.getItem('cart')
   const [state, dispatch] = useReducer(cartReducer, initialState)
 
   // récupère l'état du panier depuis le stockage local
   useEffect(() => {
-    const savedCart = window.localStorage.getItem('cart')
-    if (savedCart) {
+    if (savedState) {
       try {
-        dispatch({ type: 'SET_CART', cart: JSON.parse(savedCart) })
+        dispatch({ type: 'SET_CART', cart: JSON.parse(savedState) })
       } catch (error) {
         console.error('Error parsing JSON:', error)
       }
@@ -69,7 +108,7 @@ function CartProvider ({ children }) {
   }, [state.cart])
 
   return (
-    <CartContext.Provider value={{ state, ...cartFactory }}>
+    <CartContext.Provider value={{ state, ...cartFactory(dispatch) }}>
       {children}
     </CartContext.Provider>
   )
