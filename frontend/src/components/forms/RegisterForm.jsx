@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { validateRegisterForm } from '../../services/formAuthValidation'
 import { Input, Button } from '@nextui-org/react'
-import axios from 'axios'
+import { useAuth } from '../../context/authContext'
 
 function RegisterForm () {
   // version simple
@@ -10,6 +10,7 @@ function RegisterForm () {
   // const [lastName, setLastName] = useState('')
 
   const navigate = useNavigate()
+  const { state: { error, loading }, register } = useAuth()
 
   const [errors, setErrors] = useState({
     firstName: null,
@@ -26,7 +27,7 @@ function RegisterForm () {
     username: '',
     email: '',
     password: '',
-    role: 'Author'
+    role: 'Authenticated'
   })
 
   const handleChange = (event) => {
@@ -39,15 +40,18 @@ function RegisterForm () {
   const handleSumbit = (event) => {
     event.preventDefault()
     const _errors = validateRegisterForm(formData)
+    console.log('_errors')
+    console.log(_errors)
     if (_errors) {
       setErrors(_errors)
       console.log(_errors)
     } else {
       console.log('success')
-      const response = axios.post(`${process.env.REACT_APP_API_URL}/users`, formData)
+      register(formData)
+      // const response = axios.post(`${process.env.REACT_APP_API_URL}/users`, formData)
       // const response = axios.post(`${process.env.REACT_APP_API_URL}/auth/local/register`, formData)
       navigate('/')
-      console.log(response)
+      // console.log(response)
       window.alert(`Formulaire soumis : ${formData.firstName} ${formData.lastName}`)
     }
   }
@@ -55,8 +59,8 @@ function RegisterForm () {
   console.log(formData)
 
   return (
-    <form className='form-container' onSubmit={handleSumbit}>
-      <h2>Créer un compte</h2>
+    <form className='flex flex-col gap-4' onSubmit={handleSumbit}>
+      <h1 className='font-semibold text-4xl flex mb-10'>Créer un compte</h1>
       <Input
         name='lastName'
         label='Nom'
@@ -94,8 +98,12 @@ function RegisterForm () {
         value={formData.password}
         onChange={handleChange}
       />
+      {
+                error && <p style={{ color: 'red' }}>{JSON.stringify(error)}</p>
+            }
       <Button
         type='submit'
+        isLoading={loading}
       >
         S'enregistrer
       </Button>

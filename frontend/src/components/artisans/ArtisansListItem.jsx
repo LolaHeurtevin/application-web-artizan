@@ -9,7 +9,7 @@ function ArtisansListItem ({ artisan }) {
       <CardHeader className='p-0'>
         <img
           src={imgUrl}
-          classname='profile-picture'
+          className='profile-picture'
         />
       </CardHeader>
       <CardBody className='flex flex-col gap-4'>

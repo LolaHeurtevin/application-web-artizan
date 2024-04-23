@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from 'react'
-import { loginApi } from '../services/api'
+import { loginApi, registerApi } from '../services/api'
 import { toast } from 'react-toastify'
 
 const AuthContext = createContext()
@@ -51,6 +51,14 @@ const authReducer = (prevState, action) => {
     case actionTypes.RESET:
     case actionTypes.LOGOUT:
       return initialState
+    case actionTypes.REGISTER:
+      return {
+        ...prevState,
+        // isRegistered: true, // Mettez à jour l'état pour indiquer l'inscription réussie
+        isLoggedIn: true,
+        loading: false,
+        error: null
+      }
     default:
       throw new Error(`Unhandled action type : ${action.type}`)
   }
@@ -80,6 +88,30 @@ const authFactory = (dispatch) => ({
   },
   logout: () => {
     dispatch({ type: actionTypes.LOGOUT })
+  },
+  register: async (data) => {
+    dispatch({ type: actionTypes.LOADING })
+    try {
+      const result = await registerApi(data)
+      dispatch({
+        type: actionTypes.REGISTER,
+        data: {
+          lastName: result.lastName,
+          firstName: result.firstName,
+          username: result.username,
+          email: result.email,
+          password: result.password,
+          role: 'Authenticated'
+        }
+      })
+    } catch (error) {
+      console.log(error)
+      toast.error('Une erreur est survenue dans la création du compte')
+      dispatch({
+        type: actionTypes.ERROR,
+        data: { error: 'Une erreur est survenue dans la création du compte' }
+      })
+    }
   }
 })
 

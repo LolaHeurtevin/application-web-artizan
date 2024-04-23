@@ -10,7 +10,6 @@ function LoginForm () {
   })
 
   const navigate = useNavigate()
-
   const { state: { user, jwt, error, loading }, login } = useAuth()
 
   useEffect(() => {
@@ -33,7 +32,7 @@ function LoginForm () {
 
   return (
     <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
-      <h2>Se connecter</h2>
+      <h1 className='font-semibold text-4xl flex mb-10'>Se connecter</h1>
       <Input
         type='email'
         name='identifier'
