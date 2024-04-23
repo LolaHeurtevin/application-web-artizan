@@ -829,6 +829,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     firstName: Attribute.String;
     lastName: Attribute.String;
+    artisan: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::artisan.artisan'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
