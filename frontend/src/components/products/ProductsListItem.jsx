@@ -5,7 +5,7 @@ import { useCart } from '../../context/cartContext'
 function ProductsListItem ({ product }) {
   const { name, description, price, images } = product.attributes
 
-  const addToCart = useCart()
+  const { addToCart } = useCart()
 
   const handleAddToCart = () => {
     addToCart(product)
