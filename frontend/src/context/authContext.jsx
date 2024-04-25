@@ -104,12 +104,25 @@ const authFactory = (dispatch) => ({
           role: 'Authenticated'
         }
       })
+      /*
+      const identifier = data.email
+      const password = data.password
+      const credentials = { identifier, password }
+      const result_login = await loginApi(credentials)
+      dispatch({
+        type: actionTypes.LOGIN,
+        data: {
+          user: result.user,
+          jwt: result.jwt
+        }
+      }) */
+      await authFactory(dispatch).login({ identifier: data.email, password: data.password })
     } catch (error) {
       console.log(error)
-      toast.error('Une erreur est survenue dans la création du compte')
+      toast.error('Une erreur est survenue')
       dispatch({
         type: actionTypes.ERROR,
-        data: { error: 'Une erreur est survenue dans la création du compte' }
+        data: { error: 'Une erreur est survenue' }
       })
     }
   }

@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { validateRegisterForm } from '../../services/formAuthValidation'
+// import { validateRegisterForm } from '../../services/formAuthValidation'
 import { Input, Button } from '@nextui-org/react'
 import { useAuth } from '../../context/authContext'
 
@@ -10,8 +10,16 @@ function RegisterForm () {
   // const [lastName, setLastName] = useState('')
 
   const navigate = useNavigate()
-  const { state: { error, loading }, register } = useAuth()
+  // const { state: { error, loading }, register } = useAuth()
+  const { state: { user, jwt, error, loading }, register } = useAuth()
 
+  useEffect(() => {
+    if (user && jwt) {
+      navigate('/dashboard')
+    }
+  }, [user, jwt])
+
+  /*
   const [errors, setErrors] = useState({
     firstName: null,
     lastName: null,
@@ -20,6 +28,7 @@ function RegisterForm () {
     password: null,
     role: null
   })
+  */
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -37,6 +46,7 @@ function RegisterForm () {
     })
   }
 
+  /*
   const handleSumbit = (event) => {
     event.preventDefault()
     const _errors = validateRegisterForm(formData)
@@ -54,6 +64,12 @@ function RegisterForm () {
       // console.log(response)
       window.alert(`Formulaire soumis : ${formData.firstName} ${formData.lastName}`)
     }
+  } */
+
+  const handleSumbit = (event) => {
+    event.preventDefault()
+    console.log('success')
+    register(formData)
   }
 
   console.log(formData)
@@ -67,7 +83,7 @@ function RegisterForm () {
         placeholder='Entrez votre nom...'
         value={formData.lastName}
         onChange={handleChange}
-        error={errors.lastName}
+        // error={errors.lastName}
       />
       <Input
         name='firstName'
@@ -75,7 +91,7 @@ function RegisterForm () {
         placeholder='Entrez votre prénom...'
         value={formData.firstName}
         onChange={handleChange}
-        error={errors.firstName}
+        // error={errors.firstName}
       />
       <Input
         name='username'

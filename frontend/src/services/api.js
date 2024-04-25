@@ -19,6 +19,10 @@ const loginApi = async (credentials) => {
   return response?.data
 }
 
+/**
+ * Call API register route
+ * @param { object } userData
+ */
 const registerApi = async (userData) => {
   const response = await axiosInstance.post('/auth/local/register', {
     firstName: userData.firstName,
