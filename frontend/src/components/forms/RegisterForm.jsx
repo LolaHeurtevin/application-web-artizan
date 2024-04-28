@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 // import { validateRegisterForm } from '../../services/formAuthValidation'
-import { Input, Button } from '@nextui-org/react'
+import { Input, Button, Checkbox } from '@nextui-org/react'
 import { useAuth } from '../../context/authContext'
 
 function RegisterForm () {
@@ -10,7 +10,6 @@ function RegisterForm () {
   // const [lastName, setLastName] = useState('')
 
   const navigate = useNavigate()
-  // const { state: { error, loading }, register } = useAuth()
   const { state: { user, jwt, error, loading }, register } = useAuth()
 
   useEffect(() => {
@@ -19,30 +18,31 @@ function RegisterForm () {
     }
   }, [user, jwt])
 
-  /*
-  const [errors, setErrors] = useState({
-    firstName: null,
-    lastName: null,
-    username: null,
-    email: null,
-    password: null,
-    role: null
-  })
-  */
-
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     username: '',
     email: '',
     password: '',
+    isArtisan: false,
     role: 'Authenticated'
   })
 
+  /*
   const handleChange = (event) => {
     setFormData({
       ...formData,
       [event.target.name]: event.target.value
+    })
+  } */
+
+  const handleChange = (event) => {
+    const { name, value, checked, type } = event.target
+    const newValue = type === 'checkbox' ? checked : value
+
+    setFormData({
+      ...formData,
+      [name]: newValue
     })
   }
 
@@ -83,7 +83,6 @@ function RegisterForm () {
         placeholder='Entrez votre nom...'
         value={formData.lastName}
         onChange={handleChange}
-        // error={errors.lastName}
       />
       <Input
         name='firstName'
@@ -91,7 +90,6 @@ function RegisterForm () {
         placeholder='Entrez votre prénom...'
         value={formData.firstName}
         onChange={handleChange}
-        // error={errors.firstName}
       />
       <Input
         name='username'
@@ -114,6 +112,12 @@ function RegisterForm () {
         value={formData.password}
         onChange={handleChange}
       />
+      <Checkbox
+        name='isArtisan'
+        value={formData.isArtisan}
+        onChange={handleChange}
+      >Je souhaite m'inscrire en tant qu'artisan
+      </Checkbox>
       {
                 error && <p style={{ color: 'red' }}>{JSON.stringify(error)}</p>
             }

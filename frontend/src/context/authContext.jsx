@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useReducer } from 'react'
-import { loginApi, registerApi } from '../services/api'
+import { loginApi, registerApi, registerArtisan, registerArtisanUser } from '../services/api'
 import { toast } from 'react-toastify'
 
 const AuthContext = createContext()
@@ -54,7 +54,6 @@ const authReducer = (prevState, action) => {
     case actionTypes.REGISTER:
       return {
         ...prevState,
-        // isRegistered: true, // Mettez à jour l'état pour indiquer l'inscription réussie
         isLoggedIn: true,
         loading: false,
         error: null
@@ -92,39 +91,73 @@ const authFactory = (dispatch) => ({
   register: async (data) => {
     dispatch({ type: actionTypes.LOADING })
     try {
-      const result = await registerApi(data)
-      dispatch({
-        type: actionTypes.REGISTER,
-        data: {
-          lastName: result.lastName,
-          firstName: result.firstName,
-          username: result.username,
-          email: result.email,
-          password: result.password,
-          role: 'Authenticated'
+      if (data.isArtisan === true) {
+        try {
+          const result = await registerArtisanUser(data)
+          dispatch({
+            type: actionTypes.REGISTER,
+            data: {
+              lastName: result.lastName,
+              firstName: result.firstName,
+              username: result.username,
+              email: result.email,
+              password: result.password,
+              role: result.role
+            }
+          })
+          await registerArtisan({ name: result.user.username, id: result.user.id })
+        } catch (error) {
+          console.log(error)
+          toast.error('Une erreur est survenue lors de la création de votre profil artisan')
+          dispatch({
+            type: actionTypes.ERROR,
+            data: { error: 'Une erreur est survenue lors de la création de votre profil artisan' }
+          })
         }
-      })
-      /*
-      const identifier = data.email
-      const password = data.password
-      const credentials = { identifier, password }
-      const result_login = await loginApi(credentials)
-      dispatch({
-        type: actionTypes.LOGIN,
-        data: {
-          user: result.user,
-          jwt: result.jwt
-        }
-      }) */
-      await authFactory(dispatch).login({ identifier: data.email, password: data.password })
+      } else {
+        const result = await registerApi(data)
+        console.log(result)
+        dispatch({
+          type: actionTypes.REGISTER,
+          data: {
+            lastName: result.lastName,
+            firstName: result.firstName,
+            username: result.username,
+            email: result.email,
+            password: result.password,
+            role: 'Authenticated'
+          }
+        })
+      }
+      try {
+        await authFactory(dispatch).login({ identifier: data.email, password: data.password })
+      } catch (error) {
+        console.log(error)
+        toast.error('Une erreur est survenue lors de la connexion')
+        dispatch({
+          type: actionTypes.ERROR,
+          data: { error: 'Une erreur est survenue lors de la connexion' }
+        })
+      }
     } catch (error) {
       console.log(error)
-      toast.error('Une erreur est survenue')
+      toast.error('Une erreur est survenue lors de la création de votre compte')
       dispatch({
         type: actionTypes.ERROR,
-        data: { error: 'Une erreur est survenue' }
+        data: { error: 'Une erreur est survenue lors de la création de votre compte' }
       })
-    }
+    } /*
+    try {
+      if (data.isArtisan === true) {
+        await registerArtisan()
+      }
+    } catch (error) {
+      toast.error('Une erreur est survenue lors de la création du profil artisan')
+      dispatch({
+        type: actionTypes.ERROR,
+        data: { error: 'Une erreur est survenue lors de la création du profil artisan' }
+      })
+    } */
   }
 })
 
