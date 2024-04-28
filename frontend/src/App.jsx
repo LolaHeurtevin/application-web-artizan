@@ -6,17 +6,20 @@ import Router from './navigation/Router.jsx'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { CartProvider } from './context/cartContext.jsx'
+import { BackofficeProvider } from './context/backofficeContext.jsx'
 
 function App () {
   return (
     <>
       <NextUIProvider>
         <AuthProvider>
-          <CartProvider>
-            <Header />
-            <Router />
-            <ToastContainer />
-          </CartProvider>
+          <BackofficeProvider>
+            <CartProvider>
+              <Header />
+              <Router />
+              <ToastContainer />
+            </CartProvider>
+          </BackofficeProvider>
         </AuthProvider>
       </NextUIProvider>
     </>
