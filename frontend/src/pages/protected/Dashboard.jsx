@@ -2,45 +2,29 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/authContext'
 import { Button } from '@nextui-org/react'
 import ArtisanDashboard from '../../components/artisan/ArtisanDashboard'
+import { getArtisanInfos } from '../../services/api'
+import { useEffect, useState } from 'react'
 
 function Dashboard () {
   const navigate = useNavigate()
-  // const [response, setResponse] = useState()
+  const [response, setResponse] = useState()
 
-  const { logout } = useAuth()
+  const { state: { user }, logout } = useAuth()
 
   const handleLogout = () => {
     logout()
-    navigate('/authentication')
-  }
-  /*
-  const headers = {
-    Authorization: `Bearer ${jwt}`,
-    'Content-Type': 'application/json'
+    navigate('/')
   }
 
   useEffect(() => {
     const getData = async () => {
-      const _response = await axios.get(`${process.env.REACT_APP_API_URL}/users/me`, { headers })
-      setResponse(_response.data)
+      const _response = await getArtisanInfos(user.id)
+      setResponse(_response)
     }
     getData()
-  }, []) */
+  }, [])
 
-  // if (loading) return <h1>Chargement ...</h1>
-  // if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
-
-  /*
-  const [response, setResponse] = useState()
-
-  useEffect(() => {
-    const getData = async () => {
-      const _response = await axios.get(`${process.env.REACT_APP_API_URL}/artisans?filters[user][id]=7&populate=*`)
-      console.log(_response)
-      setResponse(_response.data)
-    }
-    getData()
-  }, []) */
+  console.log(response)
 
   return (
     <div className='mx-40 my-20 text-justify'>
@@ -48,10 +32,15 @@ function Dashboard () {
       <Button onClick={handleLogout}>
         Se déconnecter
       </Button>
-      <div className='mt-5'>
-        <h2 className='font-semibold text-2xl flex mt-10 mb-5'>Tableau de bord artisan</h2>
-        <ArtisanDashboard />
-      </div>
+      {
+        response && response.data && response.data.length > 0
+          ? (
+            <div className='mt-5'>
+              <h2 className='font-semibold text-2xl flex mt-10 mb-5'>Tableau de bord artisan</h2>
+              <ArtisanDashboard />
+            </div>)
+          : (<p className='mt-5'>Vous voulez vendre vos produits ? Créez vous un compte artisan !</p>)
+    }
     </div>
   )
 }
