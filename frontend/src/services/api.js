@@ -66,9 +66,93 @@ const registerArtisan = async (userData) => {
   return response?.data
 }
 
+/// CRUD PRODUCTS ///
+
+/**
+ * Call API route to create a product
+ * @param { object } product
+ */
+const createProduct = async (product, jwt, id) => {
+  const response = await axiosInstance.post('/products',
+    {
+      data: {
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        images: product.images,
+        artisan: id
+      }
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    })
+  return response?.data
+}
+
+/**
+ * Call API route to update a product
+ * @param { object } product
+ */
+const updateProduct = async (id, jwt, formData) => {
+  const response = await axiosInstance.put(`/products/${id}`,
+    {
+      data: {
+        name: formData.name,
+        description: formData.description,
+        price: formData.price
+      }
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    })
+  return response?.data
+}
+
+/**
+ * Call API route to update a product
+ * @param { object } product
+ */
+const deleteProduct = async (id, jwt) => {
+  const response = await axiosInstance.delete(`/products/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    })
+  return response?.data
+}
+
+/**
+ * Call API route to get all infos from an artisan
+ */
+const getArtisanProducts = async (id) => {
+  const response = await axios.get(`${process.env.REACT_APP_API_URL}/products?&filter[artisan][user]=${id}`)
+  return response?.data
+}
+
+const getArtisanInfos = async (userId) => {
+  const response = await axios.get(`${process.env.REACT_APP_API_URL}/artisans?&filters[user][id]=${userId}`)
+  return response?.data
+}
+
 export {
   loginApi,
   registerApi,
   registerArtisan,
-  registerArtisanUser
+  registerArtisanUser,
+  createProduct,
+  getArtisanProducts,
+  getArtisanInfos,
+  updateProduct,
+  deleteProduct
 }

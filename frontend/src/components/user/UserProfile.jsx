@@ -1,92 +1,13 @@
-/* import { Input, Button } from '@nextui-org/react'
-import axios from 'axios'
-import PropTypes from 'prop-types'
-import { useState } from 'react'
-import { useAuth } from '../../context/authContext'
-
-function UserProfile ({ user }) {
-  const { state: { user, jwt } } = useAuth()
-
-  console.log(user)
-
-  const [formData, setFormData] = useState({
-    firstName: user.firstName,
-    lastName: user.lastName,
-    username: user.username,
-    email: user.email
-  })
-
-  function deleteAccount () {
-    try {
-      const response = axios.delete(`${process.env.REACT_APP_API_URL}/users/${user.id}`)
-      console.log(response)
-    } catch {
-      throw new Error('Une erreur est survenue')
-    }
-  }
-
-  const handleSumbit = (event) => {
-    event.preventDefault()
-    try {
-      const response = axios.put(`${process.env.REACT_APP_API_URL}/users/${user.id}`, formData)
-      console.log(response)
-      window.alert('Vos données ont bien été mises à jour')
-    } catch {
-      throw new Error('Une erreur est survenue')
-    }
-  }
-
-  return (
-    <form className='flex flex-row' onSubmit={handleSumbit}>
-      <div className='flex-col flex-end'>
-        <h2>Vos informations</h2>
-        <Input
-          className='m-5 text-justify'
-          value={user.firstName}
-        />
-        <Input
-          className='m-5 text-justify'
-          value={user.lastName}
-        />
-        <Input
-          className='m-5 text-justify'
-          value={user.username}
-        />
-        <Input
-          className='m-5 text-justify'
-          value={user.email}
-        />
-        <Button
-          type='submit'
-        >
-          Enregistrer
-        </Button>
-
-        <Button
-          onClick={deleteAccount}
-        >
-          Supprimer mon compte
-        </Button>
-      </div>
-    </form>
-  )
-}
-
-UserProfile.propTypes = {
-  user: PropTypes.object
-}
-
-export default UserProfile */
-
 import { Input, Button } from '@nextui-org/react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuth } from '../../context/authContext'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 function UserProfile () {
-  const { state: { user, jwt, loading } } = useAuth()
+  const { state: { user, jwt }, loading, logout } = useAuth()
 
   console.log(user)
 
@@ -97,23 +18,64 @@ function UserProfile () {
     email: user.email
   })
 
+  /*
   function deleteAccount () {
     try {
-      const response = axios.delete(`${process.env.REACT_APP_API_URL}/users/${user.id}`)
+      const response = axios.delete(`${process.env.REACT_APP_API_URL}/users/${user.id}`, headers)
+      logout()
       console.log(response)
-    } catch {
-      throw new Error('Une erreur est survenue')
+    } catch (error) {
+      console.error(error)
+      toast.error('Une erreur est survenue lors de la suppression de votre compte')
+      throw new Error('Une erreur est survenue lors de la suppression de votre compte')
+    }
+  } */
+
+  const navigate = useNavigate()
+
+  const handleDeleteAccount = async () => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/users/${user.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          }
+        })
+      logout()
+      useEffect(() => {
+        if (!user || !jwt) {
+          navigate('/dashboard')
+        }
+      }, [user, jwt])
+    } catch (error) {
+      console.error(error)
+      toast.error('Une erreur est survenue lors de la suppression de votre compte')
+      throw new Error('Une erreur est survenue lors de la suppression de votre compte')
     }
   }
 
-  const handleSumbit = (event) => {
+  const handleSumbit = async (event) => {
     event.preventDefault()
+    console.log(jwt)
     try {
-      const response = axios.put(`${process.env.REACT_APP_API_URL}/users/${user.id}`, formData)
-      console.log(response)
+      await axios.put(`${process.env.REACT_APP_API_URL}/users/${user.id}`,
+        {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          username: formData.username,
+          email: formData.email
+        }, {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            'Content-Type': 'application/json',
+            Accept: 'application/json'
+          }
+        })
       toast.success('Vos données ont bien été mises à jour')
-    } catch {
-      toast.error('Une erreur est survenue lors de la mise à jour de vos données')
+    } catch (error) {
+      console.error(error)
       throw new Error('Une erreur est survenue lors de la mise à jour des données')
     }
   }
@@ -126,52 +88,54 @@ function UserProfile () {
   }
 
   return (
-    <form className='flex flex-row' onSubmit={handleSumbit}>
-      <div className='flex-col flex-end'>
-        <h2>Vos informations</h2>
+    <>
+      <h2 className='font-semibold text-2xl flex mt-10 mb-5'>Vos informations</h2>
+      <form className='flex flex-col size-fit' onSubmit={handleSumbit}>
         <Input
           name='firstName'
           label='Prénom'
-          className='m-5 text-justify'
+          className='mt-4 text-justify'
           value={formData.firstName}
           onChange={handleChange}
         />
         <Input
           name='lastName'
           label='Nom'
-          className='m-5 text-justify'
+          className='mt-4 text-justify'
           value={formData.lastName}
           onChange={handleChange}
         />
         <Input
           name='username'
           label="Nom d'utilisateur"
-          className='m-5 text-justify'
+          className='mt-4 text-justify'
           value={formData.username}
           onChange={handleChange}
         />
         <Input
           name='email'
           label='Email'
-          className='m-5 text-justify'
+          className='mt-4 text-justify'
           value={formData.email}
           onChange={handleChange}
         />
         <Button
           type='submit'
           isLoading={loading}
+          className='mt-4'
         >
           Enregistrer
         </Button>
 
         <Button
-          onClick={deleteAccount}
+          onClick={handleDeleteAccount}
           isLoading={loading}
+          className='mt-4'
         >
           Supprimer mon compte
         </Button>
-      </div>
-    </form>
+      </form>
+    </>
   )
 }
 
