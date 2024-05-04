@@ -13,7 +13,7 @@ function Dashboard () {
 
   const handleLogout = () => {
     logout()
-    navigate('/')
+    navigate('/authentication')
   }
 
   useEffect(() => {
@@ -29,7 +29,10 @@ function Dashboard () {
   return (
     <div className='mx-40 my-20 text-justify'>
       <h1 className='font-semibold text-4xl flex mb-10'>Dashboard</h1>
-      <Button onClick={handleLogout}>
+      <Button
+        onClick={handleLogout}
+        className='bg-blue-900 text-white font-semibold'
+      >
         Se déconnecter
       </Button>
       {

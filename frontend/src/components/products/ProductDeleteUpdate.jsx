@@ -97,12 +97,14 @@ function ProductDeleteUpdate ({ products }) {
       <Button
         type='submit'
         isLoading={loading}
+        className='bg-blue-300'
       >
         Mettre à jour
       </Button>
       <Button
         onClick={handleDeleteProduct}
         isLoading={loading}
+        className='bg-blue-300'
       >
         Supprimer
       </Button>

@@ -11,6 +11,27 @@ function ArtisanDashboard () {
   const [productResponse, setProductResponse] = useState()
   const [artisanResponse, setArtisanResponse] = useState()
 
+  useEffect(() => {
+    const getArtisan = async () => {
+      const _artisanResponse = await getArtisanInfos(user.id)
+      setArtisanResponse(_artisanResponse)
+    }
+    getArtisan()
+  }, [])
+
+  const artisanId = artisanResponse?.data[0]?.id
+  console.log(artisanId)
+
+  useEffect(() => {
+    if (artisanId) {
+      const getProducts = async () => {
+        const _productResponse = await getArtisanProducts(artisanId)
+        setProductResponse(_productResponse)
+      }
+      getProducts()
+    }
+  }, [artisanId])
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -37,18 +58,10 @@ function ArtisanDashboard () {
     })
   }
 
-  useEffect(() => {
-    const getData = async () => {
-      const _artisanResponse = await getArtisanInfos(user.id)
-      setArtisanResponse(_artisanResponse)
-    }
-    getData()
-  }, [])
-
   const handleAddProduct = async (event) => {
     event.preventDefault()
     try {
-      await createProduct(formData, jwt, artisanResponse.data[0]?.id)
+      await createProduct(formData, jwt, artisanId)
       toast.success('Le produit a bien été créé')
     } catch (error) {
       console.error('Error creating product:', error)
@@ -56,14 +69,6 @@ function ArtisanDashboard () {
       throw new Error('Une erreur est survenue dans la création du produit')
     }
   }
-
-  useEffect(() => {
-    const getData = async () => {
-      const _productResponse = await getArtisanProducts(user.id)
-      setProductResponse(_productResponse)
-    }
-    getData()
-  }, [])
 
   return (
     <div className='flex gap-10'>
@@ -98,6 +103,7 @@ function ArtisanDashboard () {
         <Button
           type='submit'
           isLoading={loading}
+          className='bg-blue-300'
         >
           Ajouter un produit
         </Button>

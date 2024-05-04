@@ -136,12 +136,12 @@ const deleteProduct = async (id, jwt) => {
  * Call API route to get all infos from an artisan
  */
 const getArtisanProducts = async (id) => {
-  const response = await axios.get(`${process.env.REACT_APP_API_URL}/products?&filter[artisan][user]=${id}`)
+  const response = await axios.get(`${process.env.REACT_APP_API_URL}/products?filters[artisan]=${id}`)
   return response?.data
 }
 
 const getArtisanInfos = async (userId) => {
-  const response = await axios.get(`${process.env.REACT_APP_API_URL}/artisans?&filters[user][id]=${userId}`)
+  const response = await axios.get(`${process.env.REACT_APP_API_URL}/artisans?filters[user][id]=${userId}`)
   return response?.data
 }
 
