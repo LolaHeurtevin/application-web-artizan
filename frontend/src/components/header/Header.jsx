@@ -1,7 +1,9 @@
 import { Button } from '@nextui-org/react'
-// import './Header.css'
+import { useAuth } from '../../context/authContext'
 
 function Header () {
+  const { state: { jwt } } = useAuth()
+
   return (
     <header className='shadow-md'>
       <nav className='mx-12 flex items-center justify-between font-semibold py-4'>
@@ -19,9 +21,11 @@ function Header () {
             <img src='../images/cart.webp' alt='Cart' className='w-10' />
           </a>
           <a href='/authentication'>
-            <Button>
-              Connexion
-            </Button>
+            {
+              jwt
+                ? <Button>Dashboard</Button>
+                : <Button>Connexion</Button>
+            }
           </a>
         </div>
       </nav>
