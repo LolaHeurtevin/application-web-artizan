@@ -1,14 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import { validateRegisterForm } from '../../services/formAuthValidation'
 import { Input, Button, Checkbox } from '@nextui-org/react'
 import { useAuth } from '../../context/authContext'
 
 function RegisterForm () {
-  // version simple
-  // const [firstName, setFirstName] = useState('')
-  // const [lastName, setLastName] = useState('')
-
   const navigate = useNavigate()
   const { state: { user, jwt, error, loading }, register } = useAuth()
 

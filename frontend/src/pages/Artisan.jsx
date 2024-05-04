@@ -16,7 +16,7 @@ function Artisan () {
   if (error || productsError) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
   return response && (
-    <div className='mx-40 my-20 text-justify'>
+    <div className='mx-10 md:mx-20 lg:mx-40  my-10 text-justify'>
       <ArtisanHeader attributes={response[0]?.attributes} /* response est un tableau, ? autorise que la value soit null */ />
       {
         products

@@ -7,18 +7,13 @@ function CartList ({ itemsList }) {
   }
 
   return (
-    <>
-      <div className='flex flex-col'>
-        <h2 className='text-4xl py-6'>Cart Product List</h2>
-        <div className='flex flex-row flex-wrap gap-4'>
-          {
-                    itemsList.map(product => (
-                      <CartListItem key={product.id} product={product} />
-                    ))
-                }
-        </div>
-      </div>
-    </>
+    <div className='flex flex-row flex-wrap gap-4 justify-center'>
+      {
+        itemsList.map(product => (
+          <CartListItem key={product.id} product={product} />
+        ))
+      }
+    </div>
   )
 }
 

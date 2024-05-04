@@ -7,17 +7,13 @@ function ArtisansList ({ artisans }) {
     return 'No data'
   }
   return (
-    <>
-      <div className='flex flex-col'>
-        <div className='flex flex-row flex-wrap gap-4'>
-          {
-                    artisans.map(artisan => (
-                      <ArtisansListItem key={artisan.id} artisan={artisan} />
-                    ))
-                }
-        </div>
-      </div>
-    </>
+    <div className='flex flex-row flex-wrap gap-4 justify-center'>
+      {
+        artisans.map(artisan => (
+          <ArtisansListItem key={artisan.id} artisan={artisan} />
+        ))
+      }
+    </div>
   )
 }
 

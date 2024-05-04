@@ -16,7 +16,7 @@ function Home () {
   if (error) return <pre>{JSON.stringify(error, null, 2)}</pre>
 
   return response && (
-    <div className='mx-40 my-20 text-justify'>
+    <div className='mx-10 md:mx-20 lg:mx-40  my-10 text-justify'>
       <h1 className='font-semibold text-4xl flex'>Home</h1>
       <ProductsList products={response} />
     </div>

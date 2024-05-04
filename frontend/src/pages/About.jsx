@@ -1,6 +1,6 @@
 function About () {
   return (
-    <div className='mx-40 my-20 text-justify'>
+    <div className='mx-10 md:mx-20 lg:mx-40  my-10 text-justify'>
       <h1 className='font-semibold text-4xl flex'>À propos</h1>
 
       <h2 className='font-semibold text-xl flex mt-8'>Artizan</h2>

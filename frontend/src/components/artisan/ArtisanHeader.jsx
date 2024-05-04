@@ -1,16 +1,15 @@
 import PropTypes from 'prop-types'
-import ArtisanDashboard from './ArtisanDashboard'
 
 function ArtisanHeader ({ attributes }) {
   const imgUrl = process.env.REACT_APP_BASE_URL + attributes.picture?.data?.attributes.url
 
   return (
     <div className='flex flex-col'>
-      <div className='flex flex-row'>
+      <div className='flex md:flex-row lg:flex-row flex-col'>
         <div className='flex flext-start'>
           <img
             src={imgUrl}
-            className='rounded'
+            className='rounded size-fit lg:mt-10 md:mt-20'
           />
         </div>
         <div className='flex-col flex-end m-5'>
@@ -18,7 +17,6 @@ function ArtisanHeader ({ attributes }) {
           <p className='mt-4 text-justify'>{attributes.description}</p>
         </div>
       </div>
-      <ArtisanDashboard />
     </div>
   )
 }
