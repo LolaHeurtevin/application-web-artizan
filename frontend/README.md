@@ -1,10 +1,20 @@
-# React + Vite
+# Artizan
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Artizan est une application web de vente d'objets artisanaux.
 
-Currently, two official plugins are available:
+## Fonctionnalités 
+- création de compte utilisateur ou artisan
+- authentification
+- suppression de compte
+- modification des données personnelles
+- ajout / modification / suppression de produits
+- ajout / suppression de produits au panier
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Environnement technique 
+- strapi
+- axios
+- toast
+- next ui
 
-
+## Lancer le projet
+Pour lancer le projet, cloner le dépot Git puis lancer la commande "yarn dev" depuis le terminal dans le dossier frontend et la commande "yarn develop" depuis le terminal dans le dossier backend du dépot.
